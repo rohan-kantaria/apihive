@@ -195,6 +195,33 @@ if __name__ == '__main__':
     main()
 ```
 
+## Git Commits
+
+The working directory for all git commands is:
+`C:/Users/rohan/Desktop/personal_projects/claude_projects/apihive`
+
+Commit and push at each of the following milestones — do not batch them all at the end.
+Use the exact commands below (adjust staged files as needed):
+
+```bash
+cd /c/Users/rohan/Desktop/personal_projects/claude_projects/apihive
+
+# After core/models.py and core/db.py are complete and correct:
+git add core/__init__.py core/models.py core/db.py
+git commit -m "feat(phase1): add Pydantic models and MongoDB CRUD layer"
+git push
+
+# After core/script_runner.py and core/variables.py are complete:
+git add core/script_runner.py core/variables.py
+git commit -m "feat(phase1): add JS script runner (PyMiniRacer) and variable resolver"
+git push
+
+# After app.py is complete and python app.py starts without errors:
+git add requirements.txt .env.example ui/__init__.py app.py
+git commit -m "feat(phase1): foundation complete — app starts and connects to MongoDB"
+git push
+```
+
 ## Done when
 
 - All files above exist and are complete

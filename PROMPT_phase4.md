@@ -139,6 +139,27 @@ def update_resolved(url: str):
 url_input.on('input', lambda e: update_resolved(e.value))
 ```
 
+## Git Commits
+
+The working directory for all git commands is:
+`C:/Users/rohan/Desktop/personal_projects/claude_projects/apihive`
+
+Commit and push at each of the following milestones — do not batch them all at the end.
+
+```bash
+cd /c/Users/rohan/Desktop/personal_projects/claude_projects/apihive
+
+# After ui/env_manager.py is complete with full environment CRUD and globals editor:
+git add ui/env_manager.py
+git commit -m "feat(phase4): add environment manager dialog with variable CRUD and globals editor"
+git push
+
+# After layout.py env dropdown is live and variables.py is updated with helper functions:
+git add ui/layout.py core/variables.py core/http_client.py ui/request_builder.py
+git commit -m "feat(phase4): wire active environment into top bar, request execution, and URL preview"
+git push
+```
+
 ## Done when
 
 Verify these scenarios from plan.md's Verification Plan:

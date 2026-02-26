@@ -163,6 +163,32 @@ Each tab panel should render both `request_builder` and `response_viewer` stacke
 **Integration in `ui/layout.py`:**
 Wire the SSL toggle button to actually update `app.state.ssl_verify` and update the label.
 
+## Git Commits
+
+The working directory for all git commands is:
+`C:/Users/rohan/Desktop/personal_projects/claude_projects/apihive`
+
+Commit and push at each of the following milestones — do not batch them all at the end.
+
+```bash
+cd /c/Users/rohan/Desktop/personal_projects/claude_projects/apihive
+
+# After core/http_client.py is complete (full 9-step execution flow):
+git add core/http_client.py core/variables.py
+git commit -m "feat(phase3): add async HTTP executor with script chain, variable resolution, and env persistence"
+git push
+
+# After ui/request_builder.py full implementation is complete (all tabs wired):
+git add ui/request_builder.py
+git commit -m "feat(phase3): add full request builder — method, URL, params, headers, body, script tabs"
+git push
+
+# After ui/response_viewer.py is complete and Send button is wired end-to-end:
+git add ui/response_viewer.py ui/request_tabs.py ui/layout.py
+git commit -m "feat(phase3): add response viewer with body/headers/console tabs and wire Send button"
+git push
+```
+
 ## Done when
 
 Verify these scenarios from plan.md's Verification Plan:

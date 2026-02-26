@@ -166,6 +166,37 @@ Verify tab state survives a page refresh (NiceGUI `app.storage.user` is session-
 Each debounced save should set `dirty = False` on the corresponding tab entry.
 On unsaved changes (before debounce fires), set `dirty = True`.
 
+## Git Commits
+
+The working directory for all git commands is:
+`C:/Users/rohan/Desktop/personal_projects/claude_projects/apihive`
+
+Commit and push at each of the following milestones — do not batch them all at the end.
+
+```bash
+cd /c/Users/rohan/Desktop/personal_projects/claude_projects/apihive
+
+# After core/importer.py is complete and handles collections, folders, requests, and events:
+git add core/importer.py
+git commit -m "feat(phase5): add Postman v2.1 collection importer with recursive item and event parsing"
+git push
+
+# After ui/importer_dialog.py, ui/settings.py, and layout.py Import button are wired:
+git add ui/importer_dialog.py ui/settings.py ui/layout.py
+git commit -m "feat(phase5): add import dialog, settings panel, and wire Import button in top bar"
+git push
+
+# After ui/request_tabs.py multi-tab is fully complete (close, dirty flag, max 10, session persistence):
+git add ui/request_tabs.py ui/request_builder.py
+git commit -m "feat(phase5): complete multi-tab — close, dirty indicator, max 10 tabs, session persistence"
+git push
+
+# After all 15 verification items pass (final MVP commit):
+git add -A
+git commit -m "feat: ApiHive MVP complete — all 15 verification items passing"
+git push
+```
+
 ## Done when
 
 Verify these scenarios from plan.md's Verification Plan:

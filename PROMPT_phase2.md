@@ -149,6 +149,32 @@ def build_response_viewer():
     ui.label('Response viewer — coming in Phase 3').classes('text-gray-400')
 ```
 
+## Git Commits
+
+The working directory for all git commands is:
+`C:/Users/rohan/Desktop/personal_projects/claude_projects/apihive`
+
+Commit and push at each of the following milestones — do not batch them all at the end.
+
+```bash
+cd /c/Users/rohan/Desktop/personal_projects/claude_projects/apihive
+
+# After ui/layout.py is complete and app.py is updated to use build_layout():
+git add ui/__init__.py ui/layout.py app.py
+git commit -m "feat(phase2): add top-bar layout with env dropdown, SSL toggle, and sidebar/main split"
+git push
+
+# After ui/sidebar.py is complete with full CRUD and context menus:
+git add ui/sidebar.py
+git commit -m "feat(phase2): add collection tree with CRUD, context menus, and script editors"
+git push
+
+# After ui/request_tabs.py, ui/request_builder.py stub, and ui/response_viewer.py stub are complete:
+git add ui/request_tabs.py ui/request_builder.py ui/response_viewer.py
+git commit -m "feat(phase2): add request tab bar with open/close and builder/viewer stubs"
+git push
+```
+
 ## Done when
 
 - `python app.py` → browser shows top bar + sidebar + main area layout
