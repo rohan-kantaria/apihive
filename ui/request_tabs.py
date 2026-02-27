@@ -1,7 +1,7 @@
 from nicegui import ui, app as nicegui_app
 from core import db
 
-_tabs_refresh: callable | None = None
+_tabs_refresh = None
 
 
 async def build_request_tabs():
