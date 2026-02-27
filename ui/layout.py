@@ -32,15 +32,19 @@ async def build_layout():
 
             ssl_btn.on('click', toggle_ssl)
 
-            # ── Import (Phase 5) ─────────────────────────────────────────────
-            ui.button('Import', on_click=lambda: ui.notify('Import — Phase 5')).props('flat color=white')
+            # ── Import ───────────────────────────────────────────────────────
+            def open_import():
+                from ui.importer_dialog import open_import_dialog
+                open_import_dialog()
 
-            # ── Settings — opens env manager ─────────────────────────────────
+            ui.button('Import', icon='upload_file', on_click=open_import).props('flat color=white')
+
+            # ── Settings ─────────────────────────────────────────────────────
             def open_settings():
-                from ui.env_manager import open_env_manager
-                open_env_manager()
+                from ui.settings import open_settings_dialog
+                open_settings_dialog()
 
-            ui.button('Settings', on_click=open_settings).props('flat color=white')
+            ui.button('Settings', icon='settings', on_click=open_settings).props('flat color=white')
 
     with ui.row().classes('w-full flex-grow overflow-hidden').style('height: calc(100vh - 56px)'):
         # sidebar
