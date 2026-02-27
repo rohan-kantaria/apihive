@@ -153,11 +153,24 @@ def import_postman_v21(filepath: str) -> dict:
         "errors": list[str]
     }
     """
-    errors: list[str] = []
-
     with open(filepath, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
+    return _import_data(data)
+
+
+def import_from_content(content: bytes) -> dict:
+    """
+    Same as import_postman_v21 but accepts raw file bytes instead of a path.
+    Used by the browser file-picker upload flow.
+    """
+    data = json.loads(content.decode('utf-8'))
+    return _import_data(data)
+
+
+def _import_data(data: dict) -> dict:
+
+    errors: list[str] = []
     info = data.get('info', {})
     col_name = info.get('name', 'Imported Collection')
 
