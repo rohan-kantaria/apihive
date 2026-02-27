@@ -44,7 +44,13 @@ async def build_request_tabs():
                         item = db.get_item(tab['item_id'])
                         if item:
                             from ui.request_builder import build_request_builder
-                            build_request_builder(item)
+                            from ui.response_viewer import ResponseViewer
+                            # Create viewer object first (no DOM yet) so builder can reference it
+                            viewer = ResponseViewer()
+                            # Render request builder at top (references viewer for Send wiring)
+                            build_request_builder(item, viewer)
+                            # Render response viewer DOM below the builder
+                            viewer.build()
                         else:
                             ui.label('Request not found.').classes('text-gray-400')
 

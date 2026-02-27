@@ -7,9 +7,18 @@ async def build_layout():
         with ui.row().classes('items-center gap-4'):
             # env dropdown placeholder — replaced in Phase 4
             ui.select(options=['No Environment'], value='No Environment').classes('w-48')
-            # ssl toggle
+            # ssl toggle — clicking cycles ON ↔ OFF and updates app.state.ssl_verify
             ssl_on = getattr(nicegui_app.state, 'ssl_verify', True)
-            ui.label('SSL: ON' if ssl_on else 'SSL: OFF').classes('text-sm text-white')
+            ssl_btn = ui.button(
+                f'SSL: {"ON" if ssl_on else "OFF"}',
+            ).props('flat color=white size=sm')
+
+            def toggle_ssl():
+                current = getattr(nicegui_app.state, 'ssl_verify', True)
+                nicegui_app.state.ssl_verify = not current
+                ssl_btn.set_text(f'SSL: {"ON" if nicegui_app.state.ssl_verify else "OFF"}')
+
+            ssl_btn.on('click', toggle_ssl)
             # import / settings buttons
             ui.button('Import', on_click=lambda: ui.notify('Import — Phase 5')).props('flat color=white')
             ui.button('Settings', on_click=lambda: ui.notify('Settings — coming soon')).props('flat color=white')
