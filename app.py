@@ -8,10 +8,8 @@ from core.db import get_db
 
 @ui.page('/')
 async def index():
-    # temporary placeholder — replaced in Phase 2
-    with ui.column().classes('w-full h-screen items-center justify-center'):
-        ui.label('ApiHive').classes('text-3xl font-bold')
-        ui.label('Phase 1 — Foundation').classes('text-gray-500')
+    from ui.layout import build_layout
+    await build_layout()
 
 
 def main():
@@ -29,7 +27,7 @@ def main():
     ssl_verify = os.getenv("SSL_VERIFY", "true").lower() != "false"
     app.state.ssl_verify = ssl_verify
 
-    ui.run(title='ApiHive', port=8080, reload=False)
+    ui.run(title='ApiHive', port=8080, reload=False, storage_secret='apihive-dev-secret')
 
 
 if __name__ == '__main__':
