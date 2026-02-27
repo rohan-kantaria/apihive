@@ -3,6 +3,7 @@ JS script runner using PyMiniRacer (V8 embedded).
 Implements the two-phase pm.sendRequest model from plan.md.
 """
 import json
+import re
 import httpx
 
 try:
@@ -47,7 +48,17 @@ var pm = {{
       json: function() {{ return _r.body_json !== undefined ? _r.body_json : null; }}
     }};
   }})(),
-  sendRequest: {send_request_js}
+  sendRequest: {send_request_js},
+  require: function(pkg) {{
+    __logs.push('[warn] pm.require("' + pkg + '") is not supported in ApiHive');
+    return {{}};
+  }},
+  execution: {{
+    runRequest: function(id) {{
+      __logs.push('[warn] pm.execution.runRequest is not supported in ApiHive');
+      return {{ body: {{}} }};
+    }}
+  }}
 }};
 """
 
@@ -104,6 +115,10 @@ def _execute_script(script: str, env_vars: dict, response_obj: dict | None) -> d
 
     if not script or not script.strip():
         return {"env_updates": {}, "console_output": [], "error": None, "_captured_request": None}
+
+    # V8 eval mode doesn't support top-level `await` — strip it as a compatibility shim
+    # for Postman collections that use async APIs we don't support anyway.
+    script = re.sub(r'\bawait\s+', '', script)
 
     # Phase 1: use mock sendRequest to detect if pm.sendRequest is called
     phase1_preamble = _make_preamble(env_vars, response_obj, _MOCK_SEND_REQUEST_JS)
