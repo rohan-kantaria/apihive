@@ -67,7 +67,9 @@ def _render_node(node: dict):
     label = node['label']
 
     if ntype == 'collection':
-        with ui.expansion(label, icon='folder').classes('w-full text-sm'):
+        # Wrap in a div so the context menu attaches to the whole row (including the
+        # expansion header), not just the collapsible body where Quasar puts default-slot content.
+        with ui.element('div').classes('w-full'):
             with ui.context_menu():
                 ui.menu_item('Add Folder',
                              lambda nid=nid: _add_item_dialog('folder', nid, None))
@@ -79,12 +81,13 @@ def _render_node(node: dict):
                 ui.separator()
                 ui.menu_item('Delete Collection',
                              lambda nid=nid, lbl=label: _delete_dialog('collection', nid, lbl))
-            for child in node.get('children', []):
-                _render_node(child)
+            with ui.expansion(label, icon='folder').classes('w-full text-sm'):
+                for child in node.get('children', []):
+                    _render_node(child)
 
     elif ntype == 'folder':
         col_id = node.get('collection_id', '')
-        with ui.expansion(label, icon='folder_open').classes('w-full text-sm pl-3'):
+        with ui.element('div').classes('w-full'):
             with ui.context_menu():
                 ui.menu_item('Add Request',
                              lambda col_id=col_id, nid=nid: _add_item_dialog('request', col_id, nid))
@@ -96,8 +99,9 @@ def _render_node(node: dict):
                 ui.separator()
                 ui.menu_item('Delete Folder',
                              lambda nid=nid, lbl=label: _delete_dialog('folder', nid, lbl))
-            for child in node.get('children', []):
-                _render_node(child)
+            with ui.expansion(label, icon='folder_open').classes('w-full text-sm pl-3'):
+                for child in node.get('children', []):
+                    _render_node(child)
 
     elif ntype == 'request':
         method = node.get('method', 'GET')
