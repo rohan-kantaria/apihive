@@ -109,6 +109,8 @@ def build_request_builder(item: dict, response_viewer=None):
     # ── debounced save ─────────────────────────────────────────────────────────
 
     def schedule_save():
+        from ui.request_tabs import set_tab_dirty
+        set_tab_dirty(item_id, True)
         task = _pending_task[0]
         if task is not None and not task.done():
             task.cancel()
@@ -122,6 +124,8 @@ def build_request_builder(item: dict, response_viewer=None):
         await asyncio.sleep(0.5)
         data = collect_data()
         db.update_item(item_id, data)
+        from ui.request_tabs import set_tab_dirty
+        set_tab_dirty(item_id, False)
         if _saved_label_el[0]:
             _saved_label_el[0].set_visibility(True)
             await asyncio.sleep(1.5)
