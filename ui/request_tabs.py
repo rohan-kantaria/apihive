@@ -30,7 +30,7 @@ async def build_request_tabs():
             with ui.tabs(value=active_tab, on_change=on_tab_change).classes('w-full shrink-0') as qtabs:
                 for tab in tabs_data:
                     dirty = tab.get('dirty', False)
-                    with ui.tab(name=tab['item_id']):
+                    with ui.tab(name=tab['item_id'], label=''):
                         with ui.row().classes('items-center gap-1 no-wrap'):
                             ui.label(tab['label'] + (' ●' if dirty else '')).classes('text-sm')
                             ui.button(
