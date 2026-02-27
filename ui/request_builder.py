@@ -76,6 +76,11 @@ def build_request_builder(item: dict, response_viewer=None):
     body_src = item.get('body', {'mode': 'none', 'raw': '', 'urlencoded': []})
     ue_pairs: list[dict] = [dict(u) for u in body_src.get('urlencoded', [])]
 
+    # Eagerly-tracked scalar values — updated on every keystroke via 'input' events
+    # so they're always current even if the user clicks Send without blurring the field.
+    _current_url: list = [item.get('url', '')]
+    _current_method: list = [item.get('method', 'GET')]
+
     # Element references held in single-element lists so nested functions can rebind
     _method_el: list = [None]
     _url_el: list = [None]
@@ -93,8 +98,8 @@ def build_request_builder(item: dict, response_viewer=None):
 
     def collect_data() -> dict:
         return {
-            'method': _method_el[0].value if _method_el[0] else item.get('method', 'GET'),
-            'url': _url_el[0].value if _url_el[0] else item.get('url', ''),
+            'method': _current_method[0],
+            'url': _current_url[0],
             'params': params,
             'headers': req_headers,
             'body': {
@@ -136,6 +141,13 @@ def build_request_builder(item: dict, response_viewer=None):
     async def on_send():
         # 1. Save current state
         data = collect_data()
+        url = data.get('url', '').strip()
+        if not url:
+            ui.notify('Please enter a URL before sending.', color='warning')
+            return
+        if not url.startswith(('http://', 'https://')):
+            ui.notify('URL must start with http:// or https://', color='warning')
+            return
         db.update_item(item_id, data)
 
         # 2. Execute request
@@ -169,14 +181,18 @@ def build_request_builder(item: dict, response_viewer=None):
             _method_el[0] = ui.select(
                 ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                 value=item.get('method', 'GET'),
-                on_change=lambda _: schedule_save(),
+                on_change=lambda e: (_current_method.__setitem__(0, e.value), schedule_save()),
             ).classes('w-28 shrink-0')
 
             _url_el[0] = ui.input(
                 placeholder='https://api.example.com/endpoint',
                 value=item.get('url', ''),
-                on_change=lambda _: schedule_save(),
+                on_change=lambda e: (_current_url.__setitem__(0, e.value), schedule_save()),
             ).classes('flex-grow font-mono text-sm')
+            # Also track on every keystroke so Send works even without blurring the field
+            _url_el[0].on('input', lambda e: _current_url.__setitem__(
+                0, e.args if isinstance(e.args, str) else (e.args.get('value', _current_url[0]) if isinstance(e.args, dict) else _current_url[0])
+            ))
 
             _saved_label_el[0] = ui.label('Saved ✓').classes(
                 'text-xs text-green-600 shrink-0'
@@ -201,7 +217,8 @@ def build_request_builder(item: dict, response_viewer=None):
             )
             resolved_label.set_text(resolved if '{{' in url else '')
 
-        _url_el[0].on('input', lambda e: update_resolved(e.args if isinstance(e.args, str) else _url_el[0].value))
+        # Update resolved preview on every keystroke (piggybacks on _current_url already updated above)
+        _url_el[0].on('input', lambda e: update_resolved(_current_url[0]))
 
         ui.separator().classes('my-0')
 
