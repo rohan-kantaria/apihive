@@ -173,6 +173,4 @@ Verify these scenarios from plan.md's Verification Plan:
 15. "Globals": Set a global var `api_version=v1` → it resolves in requests (lowest priority)
 16. "Env priority": Same key in globals, active env, and local .env → local .env value wins
 
-When you are confident Phase 4 is fully implemented and correct, output exactly:
-
-<promise>PHASE 4 COMPLETE</promise>
+When you are confident Phase 4 is fully implemented and correct, return control to PROMPT_master.md — the master orchestrator will advance to Phase 5.

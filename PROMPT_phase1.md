@@ -231,6 +231,4 @@ git push
 - `get_script_chain()` returns the correct outermost→innermost ordered list
 - `run_pre_request` and `run_post_request` return the correct dict shape
 
-When you are confident Phase 1 is fully implemented and correct, output exactly:
-
-<promise>PHASE 1 COMPLETE</promise>
+When you are confident Phase 1 is fully implemented and correct, return control to PROMPT_master.md — the master orchestrator will advance to Phase 2.

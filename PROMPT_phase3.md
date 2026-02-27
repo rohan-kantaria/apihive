@@ -206,6 +206,4 @@ Verify these scenarios from plan.md's Verification Plan:
    → Console shows `[collection] A` / `[folder] B` / `[request] C`
 8. "Send request": Select GET request → Send → JSON response in Body tab
 
-When you are confident Phase 3 is fully implemented and correct, output exactly:
-
-<promise>PHASE 3 COMPLETE</promise>
+When you are confident Phase 3 is fully implemented and correct, return control to PROMPT_master.md — the master orchestrator will advance to Phase 4.

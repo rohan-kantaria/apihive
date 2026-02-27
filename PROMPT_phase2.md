@@ -185,6 +185,4 @@ git push
 - Collection and folder Edit Scripts dialogs open and save pre/post scripts to MongoDB
 - Tree refreshes correctly after every CRUD operation
 
-When you are confident Phase 2 is fully implemented and correct, output exactly:
-
-<promise>PHASE 2 COMPLETE</promise>
+When you are confident Phase 2 is fully implemented and correct, return control to PROMPT_master.md — the master orchestrator will advance to Phase 3.

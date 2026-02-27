@@ -216,6 +216,4 @@ Verify these scenarios from plan.md's Verification Plan:
 
 The app is MVP-complete when all 15 verification items pass.
 
-When you are confident Phase 5 is fully implemented and correct, output exactly:
-
-<promise>PHASE 5 COMPLETE</promise>
+When you are confident Phase 5 is fully implemented and correct, return control to PROMPT_master.md — the master orchestrator will output the final completion promise.
