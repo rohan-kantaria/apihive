@@ -5,18 +5,6 @@ import httpx
 from core import db, variables, script_runner
 
 
-def _get_active_env_values(active_env_id: str | None) -> dict:
-    if not active_env_id:
-        return {}
-    env = db.get_environment(active_env_id)
-    return env.get('values', {}) if env else {}
-
-
-def _get_global_values() -> dict:
-    g = db.get_globals()
-    return g.get('values', {})
-
-
 def _flatten_env(local_env: dict, active_env_values: dict, global_values: dict) -> dict:
     """Build a flat {key: value_string} dict for the script runner (priority: local > active > global)."""
     result = {}
@@ -88,8 +76,8 @@ async def execute_request(item_id: str, active_env_id: str | None, ssl_verify: b
 
     # Step 2: resolve env_vars
     local_env = variables.load_local_env()
-    active_env_values = _get_active_env_values(active_env_id)
-    global_values = _get_global_values()
+    active_env_values = variables.get_active_env_values(active_env_id)
+    global_values = variables.get_global_values()
     current_env_vars = _flatten_env(local_env, active_env_values, global_values)
 
     # Step 3: run pre-request scripts

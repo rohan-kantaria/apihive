@@ -1,13 +1,25 @@
 from nicegui import ui, app as nicegui_app
+from core import db
 
 
 async def build_layout():
     with ui.header().classes('items-center justify-between px-4 py-2 bg-gray-900 text-white'):
         ui.label('ApiHive').classes('text-xl font-bold text-white')
         with ui.row().classes('items-center gap-4'):
-            # env dropdown placeholder — replaced in Phase 4
-            ui.select(options=['No Environment'], value='No Environment').classes('w-48')
-            # ssl toggle — clicking cycles ON ↔ OFF and updates app.state.ssl_verify
+
+            # ── Live environment dropdown ────────────────────────────────────
+            envs = db.list_environments()
+            env_options = {'': 'No Environment'} | {e['_id']: e['name'] for e in envs}
+            active_id = nicegui_app.storage.user.get('active_env_id', '')
+
+            env_select = ui.select(
+                options=env_options,
+                value=active_id if active_id in env_options else '',
+                label='Environment',
+                on_change=lambda e: nicegui_app.storage.user.update({'active_env_id': e.value}),
+            ).classes('w-48').props('dark filled dense')
+
+            # ── SSL toggle ───────────────────────────────────────────────────
             ssl_on = getattr(nicegui_app.state, 'ssl_verify', True)
             ssl_btn = ui.button(
                 f'SSL: {"ON" if ssl_on else "OFF"}',
@@ -19,9 +31,16 @@ async def build_layout():
                 ssl_btn.set_text(f'SSL: {"ON" if nicegui_app.state.ssl_verify else "OFF"}')
 
             ssl_btn.on('click', toggle_ssl)
-            # import / settings buttons
+
+            # ── Import (Phase 5) ─────────────────────────────────────────────
             ui.button('Import', on_click=lambda: ui.notify('Import — Phase 5')).props('flat color=white')
-            ui.button('Settings', on_click=lambda: ui.notify('Settings — coming soon')).props('flat color=white')
+
+            # ── Settings — opens env manager ─────────────────────────────────
+            def open_settings():
+                from ui.env_manager import open_env_manager
+                open_env_manager()
+
+            ui.button('Settings', on_click=open_settings).props('flat color=white')
 
     with ui.row().classes('w-full flex-grow overflow-hidden').style('height: calc(100vh - 56px)'):
         # sidebar

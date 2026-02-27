@@ -183,6 +183,22 @@ def build_request_builder(item: dict, response_viewer=None):
                 'color=primary'
             )
 
+        # Variable preview: resolved URL shown below the URL input when {{vars}} are present
+        resolved_label = ui.label('').classes('text-xs text-gray-400 font-mono -mt-1')
+
+        def update_resolved(url: str):
+            from core.variables import resolve, load_local_env, get_active_env_values, get_global_values
+            active_env_id = nicegui_app.storage.user.get('active_env_id')
+            resolved = resolve(
+                url,
+                load_local_env(),
+                get_active_env_values(active_env_id),
+                get_global_values(),
+            )
+            resolved_label.set_text(resolved if '{{' in url else '')
+
+        _url_el[0].on('input', lambda e: update_resolved(e.args if isinstance(e.args, str) else _url_el[0].value))
+
         ui.separator().classes('my-0')
 
         # Sub-tabs
